@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=03:71:EE:7E:3D:04:20:8B:C7:82:E2:C9:E9:DA:97:51:D0:A8:F4:CD%3Bmytaxi.challenge.code.com.org.simplegooglemaps
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    03:71:EE:7E:3D:04:20:8B:C7:82:E2:C9:E9:DA:97:51:D0:A8:F4:CD
+
+    SHA-1 certificate fingerprint:
+    03:71:EE:7E:3D:04:20:8B:C7:82:E2:C9:E9:DA:97:51:D0:A8:F4:CD
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/androimytaxi.challenge.code.com.org.simplegooglemapsd/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBhjr4SmWCB1Xn6l7YM1r-Id-077WKirSA</string>
+</resources>

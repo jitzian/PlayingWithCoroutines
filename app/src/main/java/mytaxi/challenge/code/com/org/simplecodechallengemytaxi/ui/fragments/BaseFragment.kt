@@ -9,7 +9,7 @@ import java.util.logging.Logger
 
 abstract class BaseFragment: Fragment() {
     protected lateinit var log: Logger
-    protected lateinit var rootview: View
+    protected lateinit var rootView: View
     protected var retrofit: Retrofit = RetrofitProvider.getInstance().providesRetrofit()
     protected lateinit var restService: RestService
     open fun initView(){}

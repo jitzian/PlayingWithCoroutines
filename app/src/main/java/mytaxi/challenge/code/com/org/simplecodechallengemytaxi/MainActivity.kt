@@ -11,6 +11,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.ListMyTaxiFragment
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.MapsFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,8 +63,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .replace(R.id.mFrameLayoutMainContainer, ListMyTaxiFragment(), ListMyTaxiFragment::class.java.simpleName)
                         .commit()
             }
-            R.id.nav_gallery -> {
-
+            R.id.nav_go_to_maps -> {
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.mFrameLayoutMainContainer, MapsFragment(), MapsFragment::class.java.simpleName)
+                        .commit()
             }
             R.id.nav_share -> {
 

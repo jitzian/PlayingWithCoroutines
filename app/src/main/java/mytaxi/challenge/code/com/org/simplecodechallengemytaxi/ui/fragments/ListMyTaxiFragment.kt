@@ -36,9 +36,9 @@ class ListMyTaxiFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        rootview = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
+        rootView = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
         initView()
-        return rootview
+        return rootView
     }
 
     override fun onStart() {
@@ -75,7 +75,7 @@ class ListMyTaxiFragment : BaseFragment() {
 
     override fun initView() {
         super.initView()
-        mRecyclerViewTaxi = rootview.findViewById(R.id.mRecyclerViewTaxi)
+        mRecyclerViewTaxi = rootView.findViewById(R.id.mRecyclerViewTaxi)
 
         //RecyclerView
         mRecyclerViewTaxi.setHasFixedSize(true)
