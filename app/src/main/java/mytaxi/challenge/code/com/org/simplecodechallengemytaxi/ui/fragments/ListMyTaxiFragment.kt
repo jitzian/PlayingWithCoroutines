@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
 
 import android.content.Context
@@ -9,14 +9,10 @@ import android.view.ViewGroup
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.ResultRestApi
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.BaseFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.logging.Logger
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class ListMyTaxiFragment : BaseFragment() {
     private var TAG = ListMyTaxiFragment::class.java.simpleName
@@ -48,7 +44,7 @@ class ListMyTaxiFragment : BaseFragment() {
     }
 
     private fun loadTaxis(){
-        restService.getAllTaxis().enqueue(object : Callback<ResultRestApi>{
+        restService.getAllTaxis("53.694865", "9.757589", "53.394655", "10.099891").enqueue(object : Callback<ResultRestApi>{
             override fun onFailure(call: Call<ResultRestApi>, t: Throwable) {
                 log.severe("$TAG - ${t.message}")
             }
