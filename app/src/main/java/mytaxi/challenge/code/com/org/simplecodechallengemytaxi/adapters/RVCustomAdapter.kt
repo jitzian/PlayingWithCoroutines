@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.typeOfTaxi
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
 import java.util.logging.Logger
 

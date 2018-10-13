@@ -3,10 +3,13 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.adapters.RVCustomAdapter
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.ResultRestApi
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
 import retrofit2.Call
@@ -16,6 +19,9 @@ import java.util.logging.Logger
 
 class ListMyTaxiFragment : BaseFragment() {
     private var TAG = ListMyTaxiFragment::class.java.simpleName
+    private lateinit var mRecyclerViewTaxi: RecyclerView
+    private lateinit var rvAdapter: RVCustomAdapter
+    private lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -31,6 +37,7 @@ class ListMyTaxiFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
+        initView()
         return rootview
     }
 
@@ -45,15 +52,35 @@ class ListMyTaxiFragment : BaseFragment() {
 
     private fun loadTaxis(){
         restService.getAllTaxis("53.694865", "9.757589", "53.394655", "10.099891").enqueue(object : Callback<ResultRestApi>{
+            override fun onResponse(call: Call<ResultRestApi>, response: Response<ResultRestApi>) {
+                log.info("$TAG - ${response.body()?.poiList}")
+
+                context?.let {
+                    rvAdapter = RVCustomAdapter(response.body()?.poiList, it)
+                }
+
+                rvAdapter.let{
+                    activity?.runOnUiThread {
+                        mRecyclerViewTaxi.adapter = rvAdapter
+                    }
+                }
+
+            }
+
             override fun onFailure(call: Call<ResultRestApi>, t: Throwable) {
                 log.severe("$TAG - ${t.message}")
             }
-
-            override fun onResponse(call: Call<ResultRestApi>, response: Response<ResultRestApi>) {
-                log.info("$TAG - ${response.body()}")
-            }
-
         })
+    }
+
+    override fun initView() {
+        super.initView()
+        mRecyclerViewTaxi = rootview.findViewById(R.id.mRecyclerViewTaxi)
+
+        //RecyclerView
+        mRecyclerViewTaxi.setHasFixedSize(true)
+        layoutManager = LinearLayoutManager(context)
+        mRecyclerViewTaxi.layoutManager = layoutManager
     }
 
 

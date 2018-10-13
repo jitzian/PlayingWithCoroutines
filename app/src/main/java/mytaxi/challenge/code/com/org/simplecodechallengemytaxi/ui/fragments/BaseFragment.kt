@@ -12,5 +12,5 @@ abstract class BaseFragment: Fragment() {
     protected lateinit var rootview: View
     protected var retrofit: Retrofit = RetrofitProvider.getInstance().providesRetrofit()
     protected lateinit var restService: RestService
-    fun initView(){}
+    open fun initView(){}
 }
