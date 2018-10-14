@@ -1,11 +1,15 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.db
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db
 
+import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.dataBaseName
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.dataBaseVersion
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.dao.TaxiDao
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.model.Taxi
 
+@Database(entities = [Taxi::class], version = dataBaseVersion)
 abstract class TaxiRoomDataBase: RoomDatabase() {
 
     abstract fun taxiDao(): TaxiDao
@@ -18,7 +22,7 @@ abstract class TaxiRoomDataBase: RoomDatabase() {
         internal fun getDatabase(context: Context): TaxiRoomDataBase? {
             if(INSTANCE == null){
                 synchronized(TaxiRoomDataBase::class.java){
-                    INSTANCE = Room.databaseBuilder(context.applicationContext, TaxiRoomDataBase::class.java, dataBaseName )
+                    INSTANCE = Room.databaseBuilder(context.applicationContext, TaxiRoomDataBase::class.java, dataBaseName)
                             .build()
                 }
             }
