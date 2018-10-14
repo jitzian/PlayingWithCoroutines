@@ -1,9 +1,10 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.dao
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.db
 
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.dataBaseName
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.dao.TaxiDao
 
 abstract class TaxiRoomDataBase: RoomDatabase() {
 
