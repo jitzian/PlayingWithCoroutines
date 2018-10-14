@@ -50,8 +50,10 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
 
     override fun fetchData() {
         super.fetchData()
-        fetchDataService = FetchDataService(this)
-        fetchDataService.run()
+        context?.let {
+            fetchDataService = FetchDataService(this, it)
+            fetchDataService.run()
+        }
     }
 
     override fun notifyCallBack(lstRes: List<PoiList>) {
@@ -60,9 +62,6 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
         lstRes.let { lst ->
             context?.let {
                 rvAdapter = RVCustomAdapter(lst, it)
-                dataComponent = DataComponent()
-                dataComponent.initDBOnWorkerThread(it)
-                dataComponent.unwrapData(lst)
             }
 
             rvAdapter.let {

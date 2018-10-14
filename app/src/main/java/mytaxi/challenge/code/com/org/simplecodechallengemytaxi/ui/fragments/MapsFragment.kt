@@ -11,9 +11,12 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
 import java.util.logging.Logger
 
-class MapsFragment : BaseFragment(), OnMapReadyCallback {
+class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
+
     private var TAG: String = MapsFragment::class.java.simpleName
 
     //GoogleMaps
@@ -81,8 +84,10 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
             mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
             mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
-
     }
 
+    override fun notifyCallBack(lstRes: List<PoiList>) {
+        log.info("$TAG::notifyCallBack::${lstRes.size}")
+    }
 
 }
