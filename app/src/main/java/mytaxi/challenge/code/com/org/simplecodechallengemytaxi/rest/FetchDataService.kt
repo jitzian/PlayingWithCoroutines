@@ -32,6 +32,7 @@ class FetchDataService(fetchDataCallback: FetchDataCallback, val context: Contex
                             dataComponent = DataComponent()
                             dataComponent.initDBOnWorkerThread(context)
                             dataComponent.unwrapData(poiList)
+                            dataComponent.mDbWorkerThread.quit()
 
                         }
                     }
