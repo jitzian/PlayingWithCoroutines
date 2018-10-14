@@ -7,7 +7,8 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.threadManager.
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
 import java.util.logging.Logger
 
-class DataComponent(private val lstRes: List<PoiList>?, val context: Context){
+//class DataComponent(private val lstRes: List<PoiList>?, val context: Context){
+class DataComponent {
     private var tag: String = DataComponent::class.java.simpleName
     private var log = Logger.getLogger(tag)
 
@@ -15,12 +16,18 @@ class DataComponent(private val lstRes: List<PoiList>?, val context: Context){
     private lateinit var mDbWorkerThread: DbWorkerThread
     private var mDb: TaxiDataBase? = null
 
-    init{
-        initDBOnWorkerThread()
-        unwrapData()
+    fun initDBOnWorkerThread(context: Context){
+        log.info("$tag::initDBOnWorkerThread")
+
+        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread.start()
+
+        context.let {
+            mDb = TaxiDataBase.getInstance(it)
+        }
     }
 
-    private fun unwrapData(){
+    fun unwrapData(lstRes: List<PoiList>?){
         log.info("$tag::unwrapData")
 
         lstRes?.let {
@@ -33,17 +40,6 @@ class DataComponent(private val lstRes: List<PoiList>?, val context: Context){
                 mTaxi.heading = i.heading.toString()
                 insertTaxiInDB(mTaxi)
             }
-        }
-    }
-
-    private fun initDBOnWorkerThread(){
-        log.info("$tag::initDBOnWorkerThread")
-
-        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
-        mDbWorkerThread.start()
-
-        context.let {
-            mDb = TaxiDataBase.getInstance(it)
         }
     }
 
