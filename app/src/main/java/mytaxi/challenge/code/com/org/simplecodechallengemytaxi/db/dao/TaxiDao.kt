@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dao
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.dao
 
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
