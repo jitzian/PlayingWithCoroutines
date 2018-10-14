@@ -15,4 +15,8 @@ class DbWorkerThread(threadName: String): HandlerThread(threadName){
         mWorkerThreadHandler.post(task)
     }
 
+    fun prepareHandler(){
+        mWorkerThreadHandler = Handler(looper)
+    }
+
 }

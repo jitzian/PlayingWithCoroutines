@@ -13,14 +13,20 @@ class DataComponent {
     private var log = Logger.getLogger(tag)
 
     lateinit var mTaxi: Taxi
-    private lateinit var mDbWorkerThread: DbWorkerThread
+    internal lateinit var mDbWorkerThread: DbWorkerThread
     private var mDb: TaxiDataBase? = null
 
     fun initDBOnWorkerThread(context: Context){
         log.info("$tag::initDBOnWorkerThread")
 
         mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+
+        /**
+         * DO NOT FORGET!!!
+         * For my future reference: Start and prepareHandler are a MUST in order to avoid crashes!!!
+         * **/
         mDbWorkerThread.start()
+        mDbWorkerThread.prepareHandler()
 
         context.let {
             mDb = TaxiDataBase.getInstance(it)
