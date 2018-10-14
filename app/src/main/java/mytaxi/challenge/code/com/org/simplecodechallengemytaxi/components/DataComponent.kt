@@ -7,7 +7,6 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.threadManager.
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
 import java.util.logging.Logger
 
-//class DataComponent(private val lstRes: List<PoiList>?, val context: Context){
 class DataComponent {
     private var tag: String = DataComponent::class.java.simpleName
     private var log = Logger.getLogger(tag)
@@ -38,13 +37,15 @@ class DataComponent {
 
         lstRes?.let {
             for(i in lstRes){
-                mTaxi = Taxi()
-                mTaxi.id = i.id
-                mTaxi.fleetType = i.fleetType
-                mTaxi.latitude = i.coordinate?.latitude.toString()
-                mTaxi.longitude = i.coordinate?.longitude.toString()
-                mTaxi.heading = i.heading.toString()
-                insertTaxiInDB(mTaxi)
+                with(i){
+                    mTaxi = Taxi()
+                    mTaxi.id = id
+                    mTaxi.fleetType = fleetType
+                    mTaxi.latitude = coordinate?.latitude.toString()
+                    mTaxi.longitude = coordinate?.longitude.toString()
+                    mTaxi.heading = heading.toString()
+                    insertTaxiInDB(mTaxi)
+                }
             }
         }
     }
