@@ -2,6 +2,7 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
 import android.support.v4.app.Fragment
 import android.view.View
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.components.DataComponent
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.providers.RetrofitProvider
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.viewmodel.TaxiViewModel
@@ -14,6 +15,6 @@ abstract class BaseFragment: Fragment() {
     protected var retrofit: Retrofit = RetrofitProvider.getInstance().providesRetrofit()
     protected lateinit var restService: RestService
     protected lateinit var taxiViewModel: TaxiViewModel
-
-    open fun initView(){}
+    protected lateinit var dataComponent: DataComponent
+    abstract fun initView()
 }

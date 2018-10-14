@@ -37,7 +37,6 @@ class ListMyTaxiFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
         initView()
         return rootView
@@ -48,36 +47,39 @@ class ListMyTaxiFragment : BaseFragment() {
         loadTaxis()
     }
 
-    private fun initRetrofit(){
+    private fun initRetrofit() {
         restService = retrofit.create(RestService::class.java)
     }
 
-    private fun loadTaxis(){
-        restService.getAllTaxis("53.694865", "9.757589", "53.394655", "10.099891").enqueue(object : Callback<ResultRestApi>{
-            override fun onResponse(call: Call<ResultRestApi>, response: Response<ResultRestApi>) {
-                log.info("$TAG - ${response.body()?.poiList}")
+    private fun loadTaxis() {
+        restService.getAllTaxis("53.694865", "9.757589", "53.394655", "10.099891")
+                .enqueue(object : Callback<ResultRestApi> {
 
-                context?.let {
-                    rvAdapter = RVCustomAdapter(response.body()?.poiList, it)
-                    DataComponent(response.body()?.poiList, it)
-                }
+                    override fun onResponse(call: Call<ResultRestApi>, response: Response<ResultRestApi>) {
+                        log.info("$TAG - ${response.body()?.poiList}")
 
-                rvAdapter.let{
-                    activity?.runOnUiThread {
-                        mRecyclerViewTaxi.adapter = rvAdapter
+                        context?.let {
+                            rvAdapter = RVCustomAdapter(response.body()?.poiList, it)
+                            dataComponent = DataComponent()
+                            dataComponent.initDBOnWorkerThread(it)
+                            dataComponent.unwrapData(response.body()?.poiList)
+                        }
+
+                        rvAdapter.let {
+                            activity?.runOnUiThread {
+                                mRecyclerViewTaxi.adapter = rvAdapter
+                            }
+                        }
+
                     }
-                }
 
-            }
-
-            override fun onFailure(call: Call<ResultRestApi>, t: Throwable) {
-                log.severe("$TAG - ${t.message}")
-            }
-        })
+                    override fun onFailure(call: Call<ResultRestApi>, t: Throwable) {
+                        log.severe("$TAG - ${t.message}")
+                    }
+                })
     }
 
     override fun initView() {
-        super.initView()
         mRecyclerViewTaxi = rootView.findViewById(R.id.mRecyclerViewTaxi)
 
         //RecyclerView
@@ -86,7 +88,7 @@ class ListMyTaxiFragment : BaseFragment() {
         mRecyclerViewTaxi.layoutManager = layoutManager
     }
 
-    private fun setupViewModel(){
+    private fun setupViewModel() {
         taxiViewModel = ViewModelProviders.of(this.activity!!).get(TaxiViewModel::class.java)
 //        taxiViewModel.getAllTaxis().observe(this, Observer<List<Taxi>> { t -> log.info("$TAG ->> ${t?.size}") })
     }

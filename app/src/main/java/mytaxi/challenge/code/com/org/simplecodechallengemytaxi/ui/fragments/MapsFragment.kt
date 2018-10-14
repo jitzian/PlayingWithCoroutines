@@ -47,7 +47,6 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     override fun initView() {
-        super.initView()
         mMapView = rootView.findViewById(R.id.map)
     }
 
