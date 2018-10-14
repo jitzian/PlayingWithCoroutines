@@ -1,10 +1,10 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.model
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
-@Entity(tableName = "taxiDetail")
+@Entity(tableName = "taxi")
 class Taxi {
     @PrimaryKey
     @ColumnInfo(name = "id")
