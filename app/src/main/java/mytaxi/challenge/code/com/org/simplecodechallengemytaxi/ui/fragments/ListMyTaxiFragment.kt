@@ -1,8 +1,10 @@
 package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,8 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.adapters.RVCustomAdapter
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.TaxiDataBase
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.threadManager.DbWorkerThread
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.ResultRestApi
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.model.Taxi
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.viewmodel.TaxiViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +29,10 @@ class ListMyTaxiFragment : BaseFragment() {
     private lateinit var rvAdapter: RVCustomAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
+    private lateinit var mDbWorkerThread: DbWorkerThread
+    private val mUiHandler = Handler()
+    private var mDb: TaxiDataBase? = null
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         log = Logger.getLogger(TAG)
@@ -31,6 +41,7 @@ class ListMyTaxiFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRetrofit()
+        initDBOnWorkerThread()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -81,6 +92,35 @@ class ListMyTaxiFragment : BaseFragment() {
         mRecyclerViewTaxi.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context)
         mRecyclerViewTaxi.layoutManager = layoutManager
+    }
+
+    private fun setupViewModel(){
+        taxiViewModel = ViewModelProviders.of(this.activity!!).get(TaxiViewModel::class.java)
+//        taxiViewModel.getAllTaxis().observe(this, Observer<List<Taxi>> { t -> log.info("$TAG ->> ${t?.size}") })
+    }
+
+    /***
+    * Logic for handling operations in background thread
+    * **/
+
+    //TODO: Move to an independent component maybe Inject it
+
+    private fun initDBOnWorkerThread(){
+        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread.start()
+
+        context.let {
+            if(it != null){
+                mDb = TaxiDataBase.getInstance(it)
+            }
+        }
+    }
+
+    private fun insertTaxiInDB(taxi: Taxi){
+        val task = Runnable {
+            mDb?.taxiDao()?.insert(taxi)
+        }
+        mDbWorkerThread.postTask(task)
     }
 
 
