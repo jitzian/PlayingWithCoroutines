@@ -17,7 +17,6 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataSer
 import java.util.logging.Logger
 
 class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
-
     private var TAG: String = MapsFragment::class.java.simpleName
 
     //GoogleMaps
@@ -58,7 +57,7 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
     override fun initView() {
         mMapView = rootView.findViewById(R.id.map)
     }
-    
+
     override fun fetchData() {
         super.fetchData()
         context?.let {
@@ -89,19 +88,44 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
 
     override fun onMapReady(googleMap: GoogleMap?) {
         log.severe("onMapReady::$TAG")
+        mMap = googleMap ?: return
 
-        googleMap.let {
-            mMap = it!!
-            // Add a marker in Sydney and move the camera
-            log.severe("$TAG - Its ready")
-            val sydney = LatLng(-34.0, 151.0)
-            mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        with(googleMap) {
+            context?.let {
+
+                // We will provide our own zoom controls.
+                uiSettings.isZoomControlsEnabled = true
+                uiSettings.isMyLocationButtonEnabled = true
+
+                val sydney = LatLng(-34.0, 151.0)
+                addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+
+                // Show Sydney
+                moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
+
+            }
         }
     }
 
     override fun notifyCallBack(lstRes: List<PoiList>) {
         log.info("$TAG::notifyCallBack::${lstRes.size}")
+//        setMarkersOnMap(lstRes)
+    }
+
+    private fun setMarkersOnMap(lstRes: List<PoiList>?){
+        activity?.runOnUiThread {
+            lstRes?.let{lst->
+                for(i in lst){
+                    this.safeLet(i.coordinate?.latitude, i.coordinate?.longitude){ lat, long ->
+                        val location = LatLng(lat, long)
+                        mMap.addMarker(MarkerOptions().position(location).title(i.id.toString()))
+
+                    }
+
+
+                }
+            }
+        }
     }
 
 }
