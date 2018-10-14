@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.adapters.RVCustomAdapter
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.components.DataComponent
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
 import java.util.logging.Logger

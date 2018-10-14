@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
 import java.util.logging.Logger
 
 class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
@@ -26,6 +27,11 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mMapView.onSaveInstanceState(outState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        fetchData()
     }
 
     override fun onAttach(context: Context?) {
@@ -51,6 +57,14 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
 
     override fun initView() {
         mMapView = rootView.findViewById(R.id.map)
+    }
+    
+    override fun fetchData() {
+        super.fetchData()
+        context?.let {
+            fetchDataService = FetchDataService(this, it)
+            fetchDataService.run()
+        }
     }
 
     override fun onResume() {

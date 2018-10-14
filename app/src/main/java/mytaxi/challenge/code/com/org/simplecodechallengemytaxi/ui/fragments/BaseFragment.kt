@@ -12,5 +12,4 @@ abstract class BaseFragment : Fragment() {
 
     protected lateinit var fetchDataService: FetchDataService
     open fun fetchData() {}
-
 }
