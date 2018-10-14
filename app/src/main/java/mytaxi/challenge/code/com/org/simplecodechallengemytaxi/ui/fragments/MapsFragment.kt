@@ -3,6 +3,7 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +15,10 @@ import java.util.logging.Logger
 
 class MapsFragment : BaseFragment(), OnMapReadyCallback {
     private var TAG: String = MapsFragment::class.java.simpleName
-    private var mapFragment: SupportMapFragment? = null
 
     //GoogleMaps
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
-
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -33,26 +32,23 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_maps, container, false)
-        initView()
+        try{
+            rootView = inflater.inflate(R.layout.fragment_maps, container, false)
+            initView()
 
-        MapsInitializer.initialize(context)
-        mMapView.onCreate(savedInstanceState)
-        mMapView.getMapAsync(this)
+            MapsInitializer.initialize(context)
+            mMapView.onCreate(savedInstanceState)
+            mMapView.getMapAsync(this)
+        }catch (e: InflateException){
+            log.severe("$TAG: ${e.message}")
+        }
 
         return rootView
     }
 
     override fun initView() {
         super.initView()
-//        fragmentManager?.let {
-//            mapFragment = it.findFragmentById(R.id.map) as SupportMapFragment?
-//            mapFragment?.getMapAsync(this)
-//        }
-
         mMapView = rootView.findViewById(R.id.map)
-
     }
 
     override fun onResume() {
@@ -78,15 +74,14 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap?) {
         log.severe("onMapReady::$TAG")
 
-
-//        googleMap.let {
-//            mMap = it!!
-//            // Add a marker in Sydney and move the camera
-//            log.severe("$TAG - Its ready")
-//            val sydney = LatLng(-34.0, 151.0)
-//            mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-//        }
+        googleMap.let {
+            mMap = it!!
+            // Add a marker in Sydney and move the camera
+            log.severe("$TAG - Its ready")
+            val sydney = LatLng(-34.0, 151.0)
+            mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        }
 
     }
 
