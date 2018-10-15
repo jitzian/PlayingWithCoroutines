@@ -3,6 +3,7 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
@@ -28,26 +29,26 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
         mMapView.onSaveInstanceState(outState)
     }
 
-    override fun onStart() {
-        super.onStart()
-        fetchData()
-    }
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         log = Logger.getLogger(TAG)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        fetchData()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        try{
+        try {
             rootView = inflater.inflate(R.layout.fragment_maps, container, false)
             initView()
 
             MapsInitializer.initialize(context)
             mMapView.onCreate(savedInstanceState)
             mMapView.getMapAsync(this)
-        }catch (e: InflateException){
+        } catch (e: InflateException) {
             log.severe("$TAG: ${e.message}")
         }
 
@@ -87,43 +88,25 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
-        log.severe("onMapReady::$TAG")
         mMap = googleMap ?: return
-
-        with(googleMap) {
-            context?.let {
-
-                // We will provide our own zoom controls.
-                uiSettings.isZoomControlsEnabled = true
-                uiSettings.isMyLocationButtonEnabled = true
-
-                val sydney = LatLng(-34.0, 151.0)
-                addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-
-                // Show Sydney
-                moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
-
-            }
-        }
     }
 
     override fun notifyCallBack(lstRes: List<PoiList>) {
-        log.info("$TAG::notifyCallBack::${lstRes.size}")
-//        setMarkersOnMap(lstRes)
-    }
+        with(mMap) {
+            activity?.runOnUiThread {
+                uiSettings.isZoomControlsEnabled = true
+                uiSettings.isMyLocationButtonEnabled = true
 
-    private fun setMarkersOnMap(lstRes: List<PoiList>?){
-        activity?.runOnUiThread {
-            lstRes?.let{lst->
-                for(i in lst){
-                    this.safeLet(i.coordinate?.latitude, i.coordinate?.longitude){ lat, long ->
-                        val location = LatLng(lat, long)
-                        mMap.addMarker(MarkerOptions().position(location).title(i.id.toString()))
-
+                for (i in lstRes) {
+                    with(i) {
+                        val position = LatLng(coordinate?.latitude!!, coordinate?.longitude!!)
+                        addMarker(MarkerOptions().position(position).title(id.toString()))
                     }
-
-
                 }
+                Handler().postDelayed({
+                    animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(53.694865, 9.757589), 10f))
+
+                }, 2000)
             }
         }
     }

@@ -21,6 +21,7 @@ class FetchDataService(fetchDataCallback: FetchDataCallback, val context: Contex
         val restService = RetrofitProvider.getInstance().providesRetrofit().create(RestService::class.java)
         restService.getAllTaxis("53.694865", "9.757589", "53.394655", "10.099891")
                 .enqueue(object : Callback<ResultRestApi> {
+
                     override fun onFailure(call: Call<ResultRestApi>, t: Throwable) {
                         log.severe("$TAG:: onFailure:: ${t.message}")
                     }
