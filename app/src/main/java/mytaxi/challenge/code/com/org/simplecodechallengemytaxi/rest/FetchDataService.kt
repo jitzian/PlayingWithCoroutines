@@ -17,6 +17,7 @@ class FetchDataService(fetchDataCallback: FetchDataCallback, val context: Contex
     private lateinit var dataComponent: DataComponent
 
     override fun run() {
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
         val restService = RetrofitProvider.getInstance().providesRetrofit().create(RestService::class.java)
         restService.getAllTaxis("53.694865", "9.757589", "53.394655", "10.099891")
                 .enqueue(object : Callback<ResultRestApi> {
