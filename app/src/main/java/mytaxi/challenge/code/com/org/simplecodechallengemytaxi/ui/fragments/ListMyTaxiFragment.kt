@@ -60,7 +60,7 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
 
         lstRes.let { lst ->
             context?.let {
-                rvAdapter = RVCustomAdapter(lst, it)
+                rvAdapter = RVCustomAdapter(lst, it, fragmentManager)
             }
 
             rvAdapter.let {
