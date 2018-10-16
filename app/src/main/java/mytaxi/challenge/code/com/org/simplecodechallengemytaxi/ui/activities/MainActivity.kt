@@ -21,6 +21,9 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.REQUEST_ID_MULTIPLE_PERMISSIONS
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.SPLASH_TIME_OUT
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.cancelText
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.okText
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.yesText
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.ListMyTaxiFragment
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.MapsFragment
 import java.util.logging.Logger
@@ -129,7 +132,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        log.info("$TAG - Permission callback called-------")
+        log.info("$TAG - ------------------ Permission callback called-------")
 
         when (requestCode) {
             REQUEST_ID_MULTIPLE_PERMISSIONS -> {
@@ -164,7 +167,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
 
                             showDialogOK("Service Permissions are required for this app",
-                                    DialogInterface.OnClickListener { dialog, which ->
+                                    DialogInterface.OnClickListener { _, which ->
                                         when (which) {
                                             DialogInterface.BUTTON_POSITIVE -> checkAndRequestPermissions()
                                             DialogInterface.BUTTON_NEGATIVE ->
@@ -187,8 +190,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun showDialogOK(message: String, okListener: DialogInterface.OnClickListener) {
         AlertDialog.Builder(this)
                 .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", okListener)
+                .setPositiveButton(okText, okListener)
+                .setNegativeButton(cancelText, okListener)
                 .create()
                 .show()
     }
@@ -196,11 +199,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun explain(msg: String) {
         val dialog = android.support.v7.app.AlertDialog.Builder(this)
         dialog.setMessage(msg)
-                .setPositiveButton("Yes") { _, _ ->
+                .setPositiveButton(yesText) { _, _ ->
                     //  permissionsclass.requestPermission(type,code);
-                    startActivity(Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:com.example.parsaniahardik.kotlin_marshmallowpermission")))
+                    startActivity(Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.parse("mytaxi.challenge.code.com.org.simplecodechallengemytaxi")))
                 }
-                .setNegativeButton("Cancel") { _, _ -> finish() }
+                .setNegativeButton(cancelText) { _, _ -> finish() }
         dialog.show()
     }
 

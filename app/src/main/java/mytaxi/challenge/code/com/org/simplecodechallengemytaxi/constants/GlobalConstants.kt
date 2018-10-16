@@ -25,6 +25,10 @@ class GlobalConstants{
         const val REQUEST_ID_MULTIPLE_PERMISSIONS = 1
         const val SPLASH_TIME_OUT = 2000
 
+        const val okText = "OK"
+        const val cancelText = "Cancel"
+        const val yesText = "YES"
+
 
     }
 }
