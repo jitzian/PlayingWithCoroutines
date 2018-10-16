@@ -3,7 +3,6 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +35,14 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fetchData()
+
+        //Validate if user is coming from specific marker to be displayed. If user is coming
+        //from NavigationDrawer option, then all the results are going to be displayed, otherwise,
+        //just one marker will be displayed and camera will be positioned to that particular marker
+        if (arguments == null) {
+            fetchData()
+        }
+        retainInstance = true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -88,26 +94,60 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
+        log.severe("$TAG -> onMapReady")
         mMap = googleMap ?: return
+        safeLet(arguments?.getString("latitude")?.toDouble(), arguments?.getString("longitude")?.toDouble()) { lat, long ->
+
+            activity?.runOnUiThread {
+                val position = LatLng(lat, long)
+                mMap.addMarker(MarkerOptions().position(position).title(id.toString()))
+                gotoMarker(position)
+            }
+        }
     }
 
+    /**
+     * Move camera to specific marker
+     * **/
+    private fun gotoMarker(position: LatLng) {
+        with(mMap) {
+            uiSettings.isZoomControlsEnabled = true
+            uiSettings.isMyLocationButtonEnabled = true
+            animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10f))
+        }
+    }
+
+    /**
+     * Once we get notification that data was fetched successfully, then start adding markers on
+     * ViewMAP
+     * **/
     override fun notifyCallBack(lstRes: List<PoiList>) {
         with(mMap) {
             activity?.runOnUiThread {
-                uiSettings.isZoomControlsEnabled = true
-                uiSettings.isMyLocationButtonEnabled = true
-
                 for (i in lstRes) {
                     with(i) {
-                        val position = LatLng(coordinate?.latitude!!, coordinate?.longitude!!)
-                        addMarker(MarkerOptions().position(position).title(id.toString()))
+                        safeLet(coordinate?.latitude, coordinate?.longitude) { lat, long ->
+                            val position = LatLng(lat, long)
+                            addMarker(MarkerOptions().position(position).title(id.toString()))
+                            gotoMarker(position)
+                        }
                     }
                 }
-                Handler().postDelayed({
-                    animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(53.694865, 9.757589), 10f))
-
-                }, 2000)
             }
+        }
+    }
+
+    companion object {
+        fun newInstance(latitude: String, longitude: String): MapsFragment {
+            val args = Bundle()
+            args.putString("latitude", latitude)
+            args.putString("longitude", longitude)
+
+            val fragment = MapsFragment()
+            fragment.arguments = args
+
+            return fragment
+
         }
     }
 

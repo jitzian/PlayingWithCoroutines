@@ -55,7 +55,7 @@ class RVCustomAdapter(private var lstRes: List<PoiList>?, private val context: C
                 itemView.setOnClickListener { v: View ->
                     val position: Int = adapterPosition
 
-                    Snackbar.make(v, "${GlobalConstants.textSnakBar}:: " +
+                    Snackbar.make(v, "${GlobalConstants.textSnackBar}:: " +
                             "${lstRes?.get(position)?.coordinate?.latitude.toString()}, ${lstRes?.get(position)?.coordinate?.longitude.toString()}",
                             Snackbar.LENGTH_LONG).setAction("Action", null).show()
                     val gotoMapsFragment = MapsFragment()

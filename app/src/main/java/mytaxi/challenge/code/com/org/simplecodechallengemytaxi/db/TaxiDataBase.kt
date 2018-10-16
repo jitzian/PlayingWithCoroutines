@@ -8,6 +8,11 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalC
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.dao.TaxiDao
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.model.Taxi
 
+/**
+ * Definition of RoomDatabase
+ * Singleto thread Safe!!! =D
+ * **/
+
 @Database(entities = [Taxi::class], version = GlobalConstants.dataBaseVersion)
 abstract class TaxiDataBase: RoomDatabase(){
 

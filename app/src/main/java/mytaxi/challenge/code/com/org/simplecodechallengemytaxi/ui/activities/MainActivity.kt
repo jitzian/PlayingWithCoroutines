@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.activities
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.ListMyTaxiFragment
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.MapsFragment
 
@@ -51,7 +52,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_list_taxis -> {
-                // Handle the camera action
                 supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.mFrameLayoutMainContainer, ListMyTaxiFragment(), ListMyTaxiFragment::class.java.simpleName)

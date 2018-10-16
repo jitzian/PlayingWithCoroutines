@@ -5,9 +5,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.Executors
 
+/**
+ * Singleton Component to provide Retrofit Instance. There is no need of using Dagger2 XD
+ * Singleton is ThreadSafe
+ ***/
+
 class RetrofitProvider{
 
     companion object {
+        @Volatile
         private var mInstance: RetrofitProvider = RetrofitProvider()
 
         @Synchronized
