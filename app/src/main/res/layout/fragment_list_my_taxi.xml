@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.ListMyTaxiFragment"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    tools:context=".ui.fragments.ListMyTaxiFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/mRecyclerViewTaxi"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

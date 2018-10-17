@@ -37,19 +37,12 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${deps.retrofitVersionLib}"
     implementation "com.squareup.retrofit2:converter-gson:${deps.gsonVersionLib}"
 
-    //Picasso
-    implementation "com.squareup.picasso:picasso:${deps.picassoVersionLib}"
-
     //Google Maps
     implementation "com.google.android.gms:play-services-maps:${deps.googleMapsVersionLib}"
 
     // Room components
     implementation "android.arch.persistence.room:runtime:${deps.roomVersion}"
     kapt "android.arch.persistence.room:compiler:${deps.roomVersion}"
-
-    // Lifecycle components
-    implementation "android.arch.lifecycle:extensions:${deps.archLifecycleVersion}"
-    annotationProcessor "android.arch.lifecycle:compiler:${deps.archLifecycleVersion}"
 }
 
 // Spek: separate for clarity

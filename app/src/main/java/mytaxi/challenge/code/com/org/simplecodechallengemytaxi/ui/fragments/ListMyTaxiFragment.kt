@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,7 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
         initView()
+        setRecyclerViewItemTouchListener()
         return rootView
     }
 
@@ -62,8 +64,11 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
         }
     }
 
+    lateinit var listTaxis: MutableList<PoiList>
+
     override fun notifyCallBack(lstRes: List<PoiList>) {
         log.info("$TAG::notifyCallBack::${lstRes.size}")
+        listTaxis = lstRes.toMutableList()
 
         lstRes.let { lst ->
             context?.let {
@@ -76,6 +81,28 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
                 }
             }
         }
+    }
+
+    /**
+     * Setting up Listener for swiping cards. I did not have enough time to implement difference
+     * between left or right swiping ='(
+     * **/
+
+    private fun setRecyclerViewItemTouchListener() {
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                val position = viewHolder.adapterPosition
+                listTaxis.removeAt(position)
+                mRecyclerViewTaxi.adapter?.notifyItemRemoved(position)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(mRecyclerViewTaxi)
     }
 
 }

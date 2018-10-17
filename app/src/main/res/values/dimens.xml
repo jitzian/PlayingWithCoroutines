@@ -5,4 +5,24 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="dimen_280">280dp</dimen>
+    <dimen name="dimen_0">0dp</dimen>
+    <dimen name="dimen_122_dp">122dp</dimen>
+    <dimen name="dimen_100_dp">100dp</dimen>
+    <dimen name="dimen_12_dp">12dp</dimen>
+    <dimen name="dimen_10_dp">10dp</dimen>
+    <dimen name="dimen_20_dp">20dp</dimen>
+    <dimen name="dimen_120_dp">120dp</dimen>
+    <dimen name="dimen_230_dp">230dp</dimen>
+    <dimen name="dimen_280_dp">280dp</dimen>
+    <dimen name="dimen_30_dp">30dp</dimen>
+    <dimen name="dimen_50_dp">50dp</dimen>
+    <dimen name="dimen_40_dp">40dp</dimen>
+    <dimen name="dimen_220_dp">220dp</dimen>
+    <dimen name="dimen_35_dp">35dp</dimen>
+
+    <dimen name="size_11_sp">11sp</dimen>
+    <dimen name="size_12_sp">12sp</dimen>
+    <dimen name="size_20_sp">20sp</dimen>
 </resources>
