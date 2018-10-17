@@ -1,6 +1,5 @@
 package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
-
 import android.content.Context
 import android.os.Bundle
 import android.view.InflateException
@@ -14,6 +13,7 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.util.PermissionsUtil
 import java.util.logging.Logger
 
 class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
@@ -43,6 +43,10 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
             fetchData()
         }
         retainInstance = true
+
+        permissionsUtil = PermissionsUtil(context, activity)
+        permissionsUtil.requestPermissions()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -12,6 +12,7 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.adapters.RVCustom
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.util.PermissionsUtil
 import java.util.logging.Logger
 
 class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
@@ -24,6 +25,12 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         log = Logger.getLogger(TAG)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        permissionsUtil = PermissionsUtil(context, activity)
+        permissionsUtil.requestPermissions()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
