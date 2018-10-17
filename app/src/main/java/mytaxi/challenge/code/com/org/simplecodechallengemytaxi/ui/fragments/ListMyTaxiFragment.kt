@@ -96,8 +96,12 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                 val position = viewHolder.adapterPosition
-                listTaxis.removeAt(position)
-                mRecyclerViewTaxi.adapter?.notifyItemRemoved(position)
+                try{
+                    listTaxis.removeAt(position)
+                    mRecyclerViewTaxi.adapter?.notifyItemRemoved(position)
+                }catch (indexOutOfBoundException: IndexOutOfBoundsException){
+                    log.severe("$TAG:: ${indexOutOfBoundException.message}")
+                }
             }
         }
 
