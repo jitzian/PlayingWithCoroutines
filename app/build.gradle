@@ -64,7 +64,7 @@ dependencies {
 
 // Coroutines
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.coroutinesVersionLib}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${deps.coroutinesVersionLib}"
 }
 
 dependencies {
