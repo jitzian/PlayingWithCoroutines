@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.Executors
 
 @Module
-class NetworkProvider {
+class NetworkModule {
 
     @Provides
     fun providesRetrofit(): Retrofit {
