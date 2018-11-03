@@ -3,6 +3,7 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 import android.support.v4.app.Fragment
 import android.view.View
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.util.PermissionsUtil
 import java.util.logging.Logger
 
@@ -19,6 +20,8 @@ abstract class BaseFragment : Fragment() {
     protected lateinit var fetchDataService: FetchDataService
 
     open fun fetchData() {}
+
+    protected lateinit var restService: RestService
 
     //This function is to manage 2 parameters with let, so, I'm avoiding var1.let{ it.var2.let{...
     fun <T1 : Any, T2 : Any, R : Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? {

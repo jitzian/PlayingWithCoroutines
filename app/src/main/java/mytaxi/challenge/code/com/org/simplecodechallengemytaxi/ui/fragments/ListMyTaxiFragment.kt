@@ -11,31 +11,44 @@ import android.view.ViewGroup
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.adapters.RVCustomAdapter
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.components.DaggerNetworkComponent
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.module.NetworkModule
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.util.PermissionsUtil
+import retrofit2.Retrofit
 import java.util.logging.Logger
+import javax.inject.Inject
 
 class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
 
     private var TAG = ListMyTaxiFragment::class.java.simpleName
+
     private lateinit var mRecyclerViewTaxi: RecyclerView
     private lateinit var rvAdapter: RVCustomAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
+    private lateinit var listTaxis: MutableList<PoiList>
+
+    @Inject
+    lateinit var retrofit: Retrofit
 
     override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        log = Logger.getLogger(TAG)
+        super.onAttach(context).also {
+            log = Logger.getLogger(TAG)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        permissionsUtil = PermissionsUtil(context, activity)
-        permissionsUtil.requestPermissions()
+        super.onCreate(savedInstanceState).also {
+            permissionsUtil = PermissionsUtil(context, activity)
+            permissionsUtil.requestPermissions()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         rootView = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
         initView()
         setRecyclerViewItemTouchListener()
@@ -43,11 +56,20 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
     }
 
     override fun onStart() {
-        super.onStart()
-        fetchData()
+        super.onStart().also {
+            restService = retrofit.create(RestService::class.java)
+
+        }
+
+//        fetchData()
     }
 
     override fun initView() {
+        //Dagger Injection
+        DaggerNetworkComponent.builder()
+                .networkModule(NetworkModule())
+                .build().inject(this)
+
         mRecyclerViewTaxi = rootView.findViewById(R.id.mRecyclerViewTaxi)
 
         //RecyclerView
@@ -64,7 +86,6 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
         }
     }
 
-    lateinit var listTaxis: MutableList<PoiList>
 
     override fun notifyCallBack(lstRes: List<PoiList>) {
         log.info("$TAG::notifyCallBack::${lstRes.size}")
@@ -83,11 +104,11 @@ class ListMyTaxiFragment : BaseFragment(), FetchDataCallback {
         }
     }
 
+
     /**
      * Setting up Listener for swiping cards. I did not have enough time to implement difference
      * between left or right swiping ='(
      * **/
-
     private fun setRecyclerViewItemTouchListener() {
         val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
