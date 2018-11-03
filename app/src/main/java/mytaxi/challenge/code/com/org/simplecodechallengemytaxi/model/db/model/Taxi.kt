@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.model
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

@@ -1,10 +1,10 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.dao
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import android.arch.persistence.room.Query
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.model.Taxi
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Taxi
 
 @Dao
 interface TaxiDao{

@@ -1,10 +1,12 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.components
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injection.module.components
 
 import android.content.Context
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.TaxiDataBase
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.model.Taxi
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.threadManager.DbWorkerThread
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.TaxiDataBase
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Taxi
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.threadManager.DbWorkerThread
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiList
 import java.util.logging.Logger
 
 class DataComponent {
@@ -57,5 +59,14 @@ class DataComponent {
         mDbWorkerThread.postTask(task)
     }
 
+    private fun insertTaxi(taxi: Taxi) {
+        launch {
+            val insertTaxiJob = async {
+                log.severe("$tag::insertTaxiJob::")
+                mDb?.taxiDao()?.insert(taxi)
+            }
+            insertTaxiJob.await()
+        }
+    }
 
 }

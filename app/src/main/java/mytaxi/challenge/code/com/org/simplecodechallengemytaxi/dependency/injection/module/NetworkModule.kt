@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.module
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injection.module
 
 import dagger.Module
 import dagger.Provides

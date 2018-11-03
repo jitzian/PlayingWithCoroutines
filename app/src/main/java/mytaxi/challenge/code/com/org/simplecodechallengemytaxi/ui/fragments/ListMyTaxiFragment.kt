@@ -1,6 +1,5 @@
 package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -13,14 +12,14 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.adapters.RVCustomAdapter
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.adapters.RVCustomAdapter
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.components.DaggerNetworkComponent
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.ResultRestApi
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.module.NetworkModule
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiList
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.ResultRestApi
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injection.module.NetworkModule
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.util.PermissionsUtil
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.extensions.requestPermissions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,8 +47,7 @@ class ListMyTaxiFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState).also {
-            permissionsUtil = PermissionsUtil(context, activity as Activity?)
-            permissionsUtil.requestPermissions()
+            requestPermissions()
         }
     }
 

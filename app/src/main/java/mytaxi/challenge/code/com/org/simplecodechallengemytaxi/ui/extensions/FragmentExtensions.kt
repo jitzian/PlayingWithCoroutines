@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.util.extensions
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.extensions
 
 import android.support.v4.app.Fragment
 

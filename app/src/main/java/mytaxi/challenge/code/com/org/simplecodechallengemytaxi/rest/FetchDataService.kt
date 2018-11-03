@@ -2,12 +2,12 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest
 
 import android.content.Context
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.components.DataComponent
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injection.module.components.DataComponent
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.p1Lat
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.p1Lon
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.p2Lat
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.p2Lon
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.ResultRestApi
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.ResultRestApi
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.providers.RetrofitProvider
 import retrofit2.Call
 import retrofit2.Callback

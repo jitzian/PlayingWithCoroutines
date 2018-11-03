@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.adapters
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
@@ -15,7 +15,7 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.typePool
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.typeTaxi
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiList
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.MapsFragment
 
 class RVCustomAdapter(private var lstRes: List<PoiList>, private val context: Context, private var fragmentManager: FragmentManager?)

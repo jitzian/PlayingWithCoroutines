@@ -1,6 +1,6 @@
 package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest
 
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.ResultRestApi
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.ResultRestApi
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -1,4 +1,4 @@
-package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.db.threadManager
+package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.threadManager
 
 import android.os.Handler
 import android.os.HandlerThread

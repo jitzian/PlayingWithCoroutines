@@ -11,9 +11,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.PoiList
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiList
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.util.PermissionsUtil
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.extensions.requestPermissions
 import java.util.logging.Logger
 
 class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
@@ -24,29 +24,29 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
     private lateinit var mMapView: MapView
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mMapView.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState).also {
+            mMapView.onSaveInstanceState(outState)
+        }
     }
 
     override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        log = Logger.getLogger(TAG)
+        super.onAttach(context).also {
+            log = Logger.getLogger(TAG)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState).also {
+            //Validate if user is coming from specific marker to be displayed. If user is coming
+            //from NavigationDrawer option, then all the results are going to be displayed, otherwise,
+            //just one marker will be displayed and camera will be positioned to that particular marker
+            if (arguments == null) {
+//                fetchData()
+            }
+            retainInstance = true
 
-        //Validate if user is coming from specific marker to be displayed. If user is coming
-        //from NavigationDrawer option, then all the results are going to be displayed, otherwise,
-        //just one marker will be displayed and camera will be positioned to that particular marker
-        if (arguments == null) {
-            fetchData()
+            requestPermissions()
         }
-        retainInstance = true
-
-        permissionsUtil = PermissionsUtil(context, activity)
-        permissionsUtil.requestPermissions()
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -78,23 +78,27 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
     }
 
     override fun onResume() {
-        super.onResume()
-        mMapView.onResume()
+        super.onResume().also {
+            mMapView.onResume()
+        }
     }
 
     override fun onLowMemory() {
-        super.onLowMemory()
-        mMapView.onLowMemory()
+        super.onLowMemory().also {
+            mMapView.onLowMemory()
+        }
     }
 
     override fun onPause() {
-        super.onPause()
-        mMapView.onPause()
+        super.onPause().also {
+            mMapView.onPause()
+        }
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        mMapView.onDestroy()
+        super.onDestroy().also {
+            mMapView.onDestroy()
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -138,20 +142,6 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
                     }
                 }
             }
-        }
-    }
-
-    companion object {
-        fun newInstance(latitude: String, longitude: String): MapsFragment {
-            val args = Bundle()
-            args.putString("latitude", latitude)
-            args.putString("longitude", longitude)
-
-            val fragment = MapsFragment()
-            fragment.arguments = args
-
-            return fragment
-
         }
     }
 
