@@ -16,7 +16,7 @@ interface TaxiDao{
     fun deleteAll()
 
     @Query("SELECT * FROM taxi ORDER BY id ASC")
-    fun getAll(): List<Taxi>
+    fun getAll(): List<Taxi>?
 
     @Query("SELECT * FROM taxi WHERE id = (:id)")
     fun getById(id: Int): Taxi
