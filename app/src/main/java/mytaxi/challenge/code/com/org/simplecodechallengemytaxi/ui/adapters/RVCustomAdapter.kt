@@ -15,11 +15,12 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.typePool
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.constants.GlobalConstants.Companion.typeTaxi
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiList
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Taxi
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.MapsFragment
 
-class RVCustomAdapter(private var lstRes: List<PoiList>, private val context: Context, private var fragmentManager: FragmentManager?)
-    : RecyclerView.Adapter<RVCustomAdapter.ViewHolder>() {
+class RVCustomAdapter(private var lstRes: List<Taxi>,
+                      private val context: Context,
+                      private var fragmentManager: FragmentManager?) : RecyclerView.Adapter<RVCustomAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.card_view_taxi, p0, false))
@@ -42,14 +43,13 @@ class RVCustomAdapter(private var lstRes: List<PoiList>, private val context: Co
             }
         }
         holder.mTextViewFleetTypeValue.text = lstRes[position].fleetType
-        holder.mTextViewFromValueLatitude.text = lstRes[position].coordinate?.latitude.toString()
-        holder.mTextViewFromValueLongitude.text = lstRes[position].coordinate?.longitude.toString()
+        holder.mTextViewFromValueLatitude.text = lstRes[position].latitude.toString()
+        holder.mTextViewFromValueLongitude.text = lstRes[position].longitude.toString()
     }
 
     /**
      * ViewHolder for RecyclerView
      * **/
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         lateinit var mImageViewTaxi: ImageView
@@ -65,13 +65,17 @@ class RVCustomAdapter(private var lstRes: List<PoiList>, private val context: Co
                 mTextViewFromValueLongitude = it.findViewById(R.id.mTextViewFromValueLongitude)
                 itemView.setOnClickListener { v: View ->
                     val position: Int = adapterPosition
+
                     Snackbar.make(v, "${GlobalConstants.textSnackBar}:: " +
-                            "${lstRes[position].coordinate?.latitude.toString()}, ${lstRes[position].coordinate?.longitude.toString()}",
+                            "${lstRes[position].latitude.toString()}, ${lstRes[position].longitude.toString()}",
                             Snackbar.LENGTH_LONG).setAction("Action", null).show()
+
+
                     val gotoMapsFragment = MapsFragment()
                     val bundle = Bundle()
-                    bundle.putString("latitude", lstRes[position].coordinate?.latitude.toString())
-                    bundle.putString("longitude", lstRes[position].coordinate?.longitude.toString())
+                    bundle.putString("latitude", lstRes[position].latitude.toString())
+                    bundle.putString("longitude", lstRes[position].longitude.toString())
+
                     gotoMapsFragment.arguments = bundle
                     Handler().postDelayed({
                         fragmentManager?.beginTransaction()?.replace(R.id.mFrameLayoutMainContainer, gotoMapsFragment, MapsFragment::class.java.simpleName)?.commit()
