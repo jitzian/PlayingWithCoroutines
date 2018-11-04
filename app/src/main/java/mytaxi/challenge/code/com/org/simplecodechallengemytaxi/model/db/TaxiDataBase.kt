@@ -10,11 +10,11 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Ta
 
 /**
  * Definition of RoomDatabase
- * Singleto thread Safe!!! =D
+ * Singleton thread Safe!!! =D
  * **/
 
-@Database(entities = [Taxi::class], version = GlobalConstants.dataBaseVersion)
-abstract class TaxiDataBase: RoomDatabase(){
+@Database(entities = [Taxi::class], exportSchema = false, version = GlobalConstants.dataBaseVersion)
+abstract class TaxiDataBase : RoomDatabase() {
 
     abstract fun taxiDao(): TaxiDao
 
@@ -23,16 +23,16 @@ abstract class TaxiDataBase: RoomDatabase(){
         @Volatile
         private var INSTANCE: TaxiDataBase? = null
 
-        fun getInstance(context: Context): TaxiDataBase?{
-            if(INSTANCE == null){
-                synchronized(TaxiDataBase::class){
+        fun getInstance(context: Context): TaxiDataBase? {
+            if (INSTANCE == null) {
+                synchronized(TaxiDataBase::class) {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
                             TaxiDataBase::class.java, GlobalConstants.dataBaseName)
+                            .fallbackToDestructiveMigration()
                             .build()
                 }
             }
             return INSTANCE
         }
-
     }
 }
