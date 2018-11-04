@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">SimpleCodeChallengeMyTaxi</string>
+    <string name="app_name">MyTaxi</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">MyTaxi Code Challenge</string>
-    <string name="nav_header_subtitle">jonathan.sandoval@live.com</string>
+    <string name="nav_header_subtitle">jitzian@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 </resources>

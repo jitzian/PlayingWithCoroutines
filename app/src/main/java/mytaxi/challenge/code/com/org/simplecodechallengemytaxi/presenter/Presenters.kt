@@ -6,7 +6,7 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiLis
 
 interface BasePresenter {
     var mDb: TaxiDataBase?
-    fun fetchRemoteData(): List<PoiList>?
+    suspend fun fetchRemoteData(): List<Taxi>?
     fun insert(taxi: Taxi)
     fun deleteAll()
     suspend fun getAll(): List<Taxi>?
@@ -14,5 +14,4 @@ interface BasePresenter {
 }
 
 interface ListTaxiPresenter : BasePresenter
-
 interface MapsPresenter : BasePresenter

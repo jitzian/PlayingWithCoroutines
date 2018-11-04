@@ -27,10 +27,7 @@ class ListTaxiPresenterImpl(var context: Context?) : ListTaxiPresenter {
     private val TAG = ListTaxiPresenterImpl::class.java.simpleName
     private val log = Logger.getLogger(TAG)
     private var restService: RestService
-    private lateinit var lstRes: List<PoiList>
-    private lateinit var lstTaxi: List<Taxi>
-
-//    private var mDb: TaxiDataBase? = null
+    private var lstRes: List<PoiList>? = null
 
     init {
         mDb = context?.let { TaxiDataBase.getInstance(it) }
@@ -42,7 +39,8 @@ class ListTaxiPresenterImpl(var context: Context?) : ListTaxiPresenter {
         restService = retrofit.create(RestService::class.java)
     }
 
-    override fun fetchRemoteData(): List<PoiList>? {
+    override suspend fun fetchRemoteData(): List<Taxi>? {
+        val lstTaxi: MutableList<Taxi> = mutableListOf()
         launch {
             val fetchRemoteDataResult = async {
                 restService.getAllTaxis(
@@ -56,7 +54,15 @@ class ListTaxiPresenterImpl(var context: Context?) : ListTaxiPresenter {
 
                     override fun onResponse(call: Call<ResultRestApi>, response: Response<ResultRestApi>) {
                         response.body()?.poiList?.let {
+                            log.info("$TAG::onResponse::${it.size}")
                             lstRes = it
+                            for (i in it){
+                                with(i){
+                                    val innerTaxi = Taxi(latitude = coordinate?.latitude, longitude = coordinate?.longitude, fleetType = fleetType, heading = heading)
+                                    insert(taxi = innerTaxi)
+                                    lstTaxi.add(innerTaxi)
+                                }
+                            }
                         }
                     }
                 })
@@ -64,7 +70,7 @@ class ListTaxiPresenterImpl(var context: Context?) : ListTaxiPresenter {
             fetchRemoteDataResult.await()
         }
 
-        return lstRes
+        return lstTaxi
     }
 
     override fun insert(taxi: Taxi) {
@@ -81,9 +87,10 @@ class ListTaxiPresenterImpl(var context: Context?) : ListTaxiPresenter {
     }
 
     override suspend fun getAll(): List<Taxi>? {
+        var lstTaxi: MutableList<Taxi> = mutableListOf()
         val getAllJob = launch {
             mDb?.taxiDao()?.getAll()?.let {
-                lstTaxi = it
+                lstTaxi = it.toMutableList()
             }
         }
         getAllJob.join()

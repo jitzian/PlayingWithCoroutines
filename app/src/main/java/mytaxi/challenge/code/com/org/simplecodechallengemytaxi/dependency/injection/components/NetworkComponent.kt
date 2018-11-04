@@ -9,7 +9,6 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.Maps
 
 @Component(modules = [NetworkModule::class])
 interface NetworkComponent {
-    fun inject(mapsFragment: MapsFragment)
     fun inject(listTaxiPresenter: ListTaxiPresenterImpl)
     fun inject(mapsPresenter: MapsPresenterImpl)
 }

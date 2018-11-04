@@ -24,7 +24,8 @@ class ListMyTaxiFragment : BaseFragment(), ListMyTaxiFragmentView {
     private lateinit var mRecyclerViewTaxi: RecyclerView
     private lateinit var rvAdapter: RVCustomAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var listTaxis: MutableList<Taxi>
+
+    private var listTaxis: MutableList<Taxi>? = null
     private lateinit var listTaxiPresenter: ListTaxiPresenter
 
     override fun onAttach(context: Context?) {
@@ -33,23 +34,45 @@ class ListMyTaxiFragment : BaseFragment(), ListMyTaxiFragmentView {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState).also {
-            rootView = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
-            initView()
-            setRecyclerViewItemTouchListener()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState).also {
+            //Init Presenter
+            context.let { ctx ->
+                listTaxiPresenter = ListTaxiPresenterImpl(ctx)
+            }
+
+            //Check if DB is not Empty
+            launch {
+                listTaxiPresenter.getAll().let { lstResult ->
+                    if (lstResult != null) {
+                        listTaxis = lstResult as MutableList<Taxi>
+                    }
+                }
+            }
+
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        rootView = inflater.inflate(R.layout.fragment_list_my_taxi, container, false)
+        initView()
+        setRecyclerViewItemTouchListener()
+
         return rootView
     }
 
-    override fun onStart() {
-        super.onStart().also {
-
+    override fun onResume() {
+        super.onResume().also {
+            log.info("$TAG::onResume")
             launch {
-                getAll().let { it ->
-                    if (it != null) {
-                        listTaxis = it as MutableList<Taxi>
-                        displayListOfTaxis(it)
+                listTaxiPresenter.getAll()?.let { resultDB ->
+                    if (resultDB.isNotEmpty()) {
+                        log.info("$TAG::onResume::NOT_EMPTY::${resultDB.size}")
+                        displayListOfTaxis(resultDB)
+                    } else {
+                        log.info("$TAG::onResume::EMPTY::$resultDB")
+                        displayListOfTaxis(listTaxiPresenter.fetchRemoteData())
                     }
                 }
             }
@@ -57,16 +80,24 @@ class ListMyTaxiFragment : BaseFragment(), ListMyTaxiFragmentView {
     }
 
     override fun initView() {
-        //Init Presenter
-        context.let {
-            listTaxiPresenter = ListTaxiPresenterImpl(it)
-        }
-
         //RecyclerView
         mRecyclerViewTaxi = rootView.findViewById(R.id.mRecyclerViewTaxi)
         mRecyclerViewTaxi.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context)
         mRecyclerViewTaxi.layoutManager = layoutManager
+    }
+
+
+    override fun displayListOfTaxis(lstTaxis: List<Taxi>?) {
+        log.info("$TAG::displayListOfTaxis::$lstTaxis")
+        safeLet(lstTaxis, context) { lst, ctx ->
+            rvAdapter = RVCustomAdapter(lst, ctx, fragmentManager)
+            rvAdapter.let {
+                requireActivity().runOnUiThread {
+                    mRecyclerViewTaxi.adapter = rvAdapter
+                }
+            }
+        }
     }
 
     /**
@@ -88,7 +119,7 @@ class ListMyTaxiFragment : BaseFragment(), ListMyTaxiFragmentView {
                         listTaxis.let {
                             try {
 
-                                listTaxis.removeAt(position)
+                                listTaxis?.removeAt(position)
                                 mRecyclerViewTaxi.adapter?.notifyItemRemoved(position)
                             } catch (indexOutOfBoundException: IndexOutOfBoundsException) {
                                 log.severe("$TAG:: ${indexOutOfBoundException.message}")
@@ -100,26 +131,4 @@ class ListMyTaxiFragment : BaseFragment(), ListMyTaxiFragmentView {
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(mRecyclerViewTaxi)
     }
-
-    override suspend fun insert(taxi: Taxi) {
-        listTaxiPresenter.insert(taxi)
-    }
-
-    override suspend fun getAll(): List<Taxi>? {
-        return listTaxiPresenter.getAll()
-    }
-
-    override suspend fun getById(id: Int): Taxi? {
-        return listTaxiPresenter.getById(id)
-    }
-
-    override fun displayListOfTaxis(lstTaxis: List<Taxi>) {
-        rvAdapter = RVCustomAdapter(lstRes = lstTaxis, context = requireContext(), fragmentManager = requireFragmentManager())
-        rvAdapter.let {
-            requireActivity().runOnUiThread {
-                mRecyclerViewTaxi.adapter = rvAdapter
-            }
-        }
-    }
-
 }

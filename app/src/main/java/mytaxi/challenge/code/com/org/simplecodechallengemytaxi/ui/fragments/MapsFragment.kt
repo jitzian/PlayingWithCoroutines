@@ -9,19 +9,23 @@ import android.view.ViewGroup
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.experimental.launch
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.callbacks.FetchDataCallback
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiList
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.FetchDataService
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Taxi
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.presenter.MapsPresenter
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.presenter.MapsPresenterImpl
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.extensions.requestPermissions
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.view.MapsFragmentView
 import java.util.logging.Logger
 
-class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
+class MapsFragment : BaseFragment(), OnMapReadyCallback, MapsFragmentView {
+
     private var TAG: String = MapsFragment::class.java.simpleName
 
     //GoogleMaps
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
+    private lateinit var mapsPresenter: MapsPresenter
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState).also {
@@ -35,16 +39,26 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
         }
     }
 
+    override fun placeMarkers(lstTaxis: List<Taxi>) {
+        with(mMap) {
+            activity?.runOnUiThread {
+                for (i in lstTaxis) {
+                    with(i) {
+                        safeLet(latitude, longitude) { lat, long ->
+                            val position = com.google.android.gms.maps.model.LatLng(lat, long)
+                            addMarker(MarkerOptions().position(position).title(id.toString()))
+                            gotoMarker(position)
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState).also {
-            //Validate if user is coming from specific marker to be displayed. If user is coming
-            //from NavigationDrawer option, then all the results are going to be displayed, otherwise,
-            //just one marker will be displayed and camera will be positioned to that particular marker
-            if (arguments == null) {
-//                fetchData()
-            }
             retainInstance = true
-
             requestPermissions()
         }
     }
@@ -66,15 +80,10 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
     }
 
     override fun initView() {
-        mMapView = rootView.findViewById(R.id.map)
-    }
-
-    override fun fetchData() {
-        super.fetchData()
-        context?.let {
-            fetchDataService = FetchDataService(this, it)
-            fetchDataService.run()
+        context.let {
+            mapsPresenter = MapsPresenterImpl(it)
         }
+        mMapView = rootView.findViewById(R.id.map)
     }
 
     override fun onResume() {
@@ -103,45 +112,36 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback, FetchDataCallback {
 
     override fun onMapReady(googleMap: GoogleMap?) {
         log.severe("$TAG -> onMapReady")
-        mMap = googleMap ?: return
-        safeLet(arguments?.getString("latitude")?.toDouble(), arguments?.getString("longitude")?.toDouble()) { lat, long ->
 
-            activity?.runOnUiThread {
-                val position = LatLng(lat, long)
-                mMap.addMarker(MarkerOptions().position(position).title(id.toString()))
-                gotoMarker(position)
+        mMap = googleMap ?: return
+
+        if (arguments != null){
+            safeLet(arguments?.getString("latitude")?.toDouble(), arguments?.getString("longitude")?.toDouble()) { lat, long ->
+                activity?.runOnUiThread {
+                    val position = LatLng(lat, long)
+                    mMap.addMarker(MarkerOptions().position(position).title(id.toString()))
+                    gotoMarker(position)
+                }
+            }
+        }else{
+            launch {
+                safeLet(mapsPresenter.getAll()) { listOfTaxis ->
+                    log.severe("$TAG::${listOfTaxis.size}")
+                    placeMarkers(listOfTaxis)
+                }
             }
         }
+
     }
 
     /**
      * Move camera to specific marker
      * **/
-    private fun gotoMarker(position: LatLng) {
+    override fun gotoMarker(position: LatLng) {
         with(mMap) {
             uiSettings.isZoomControlsEnabled = true
             uiSettings.isMyLocationButtonEnabled = true
             animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10f))
-        }
-    }
-
-    /**
-     * Once we get notification that data was fetched successfully, then start adding markers on
-     * ViewMAP
-     * **/
-    override fun notifyCallBack(lstRes: List<PoiList>) {
-        with(mMap) {
-            activity?.runOnUiThread {
-                for (i in lstRes) {
-                    with(i) {
-                        safeLet(coordinate?.latitude, coordinate?.longitude) { lat, long ->
-                            val position = LatLng(lat, long)
-                            addMarker(MarkerOptions().position(position).title(id.toString()))
-                            gotoMarker(position)
-                        }
-                    }
-                }
-            }
         }
     }
 
