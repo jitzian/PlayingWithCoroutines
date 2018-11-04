@@ -10,21 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.launch
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.R
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injection.components.DaggerNetworkComponent
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injection.module.NetworkModule
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Taxi
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.presenter.ListTaxiPresenter
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.presenter.ListTaxiPresenterImpl
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.RestService
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.rest.model.PoiList
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.adapters.RVCustomAdapter
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.extensions.requestPermissions
-import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.view.ListTaxiView
-import retrofit2.Retrofit
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.view.ListMyTaxiFragmentView
 import java.util.logging.Logger
-import javax.inject.Inject
 
-class ListMyTaxiFragment : BaseFragment(), ListTaxiView {
+class ListMyTaxiFragment : BaseFragment(), ListMyTaxiFragmentView {
 
     private var TAG = ListMyTaxiFragment::class.java.simpleName
 
@@ -106,10 +99,6 @@ class ListMyTaxiFragment : BaseFragment(), ListTaxiView {
 
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(mRecyclerViewTaxi)
-    }
-
-    override suspend fun verifyIfDataBaseIsNotEmpty(): Boolean? {
-        return listTaxiPresenter.getAll()?.isEmpty()
     }
 
     override suspend fun insert(taxi: Taxi) {

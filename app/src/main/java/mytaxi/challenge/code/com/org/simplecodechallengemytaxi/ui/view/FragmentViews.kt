@@ -2,14 +2,16 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.view
 
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Taxi
 
-interface ListTaxiView {
-
+interface BaseView{
     suspend fun insert(taxi: Taxi)
     suspend fun getAll(): List<Taxi>?
     suspend fun getById(id: Int): Taxi?
-    suspend fun verifyIfDataBaseIsNotEmpty(): Boolean?
+}
 
+interface ListMyTaxiFragmentView : BaseView{
     fun setRecyclerViewItemTouchListener()
     fun displayListOfTaxis(lstTaxis: List<Taxi>)
-
 }
+
+interface MapsFragmentView: BaseView
+
