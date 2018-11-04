@@ -43,9 +43,9 @@ class DataComponent {
                     mTaxi = Taxi()
                     mTaxi.id = id
                     mTaxi.fleetType = fleetType
-                    mTaxi.latitude = coordinate?.latitude.toString()
-                    mTaxi.longitude = coordinate?.longitude.toString()
-                    mTaxi.heading = heading.toString()
+                    mTaxi.latitude = coordinate?.latitude
+                    mTaxi.longitude = coordinate?.longitude
+                    mTaxi.heading = heading
                     insertTaxiInDB(mTaxi)
                 }
             }

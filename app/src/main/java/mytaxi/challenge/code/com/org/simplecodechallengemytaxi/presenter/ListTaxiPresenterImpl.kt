@@ -19,6 +19,8 @@ import java.util.logging.Logger
 import javax.inject.Inject
 
 class ListTaxiPresenterImpl(var context: Context?) : ListTaxiPresenter {
+    override var mDb: TaxiDataBase? = null
+
     @Inject
     lateinit var retrofit: Retrofit
 
@@ -28,7 +30,7 @@ class ListTaxiPresenterImpl(var context: Context?) : ListTaxiPresenter {
     private lateinit var lstRes: List<PoiList>
     private lateinit var lstTaxi: List<Taxi>
 
-    private var mDb: TaxiDataBase? = null
+//    private var mDb: TaxiDataBase? = null
 
     init {
         mDb = context?.let { TaxiDataBase.getInstance(it) }

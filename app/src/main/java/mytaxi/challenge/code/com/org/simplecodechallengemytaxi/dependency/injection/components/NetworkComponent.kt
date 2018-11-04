@@ -3,6 +3,7 @@ package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injec
 import dagger.Component
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.dependency.injection.module.NetworkModule
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.presenter.ListTaxiPresenterImpl
+import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.presenter.MapsPresenterImpl
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.ListMyTaxiFragment
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.MapsFragment
 
@@ -10,4 +11,5 @@ import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.ui.fragments.Maps
 interface NetworkComponent {
     fun inject(mapsFragment: MapsFragment)
     fun inject(listTaxiPresenter: ListTaxiPresenterImpl)
+    fun inject(mapsPresenter: MapsPresenterImpl)
 }
