@@ -1,18 +1,25 @@
 package mytaxi.challenge.code.com.org.simplecodechallengemytaxi.presenter
 
 import android.content.Context
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.TaxiDataBase
 import mytaxi.challenge.code.com.org.simplecodechallengemytaxi.model.db.model.Taxi
 
-class ListTaxiPresenterImpl (var context: Context): ListTaxiPresenter{
+class ListTaxiPresenterImpl (var context: Context?): ListTaxiPresenter{
     private var mDb: TaxiDataBase? = null
 
     init{
-        mDb = TaxiDataBase.getInstance(context)
+        mDb = context?.let { TaxiDataBase.getInstance(it) }
     }
 
     override fun insert(taxi: Taxi){
-        mDb?.taxiDao()?.insert(taxi)
+        launch {
+            val insertJob = async {
+                mDb?.taxiDao()?.insert(taxi)
+            }
+            insertJob.await()
+        }
     }
 
     override fun deleteAll(){
